@@ -1,0 +1,102 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+
+version: "v0.4"
+
+project:
+  name: "fc-ame-5-2"
+  description: >-
+    A machine-checked proof that an absolutely maximally entangled state of five qubits
+    exists, against the definitions of Formal Conjectures Open Quantum Problem 35. The
+    witness is the five-qubit ring graph state.
+  authors:
+    - "Zayn Blore"
+  license: "Apache-2.0"
+
+sources:
+  - title: >-
+      Multipartite entanglement, quantum-error-correcting codes, and entangling power
+      of quantum evolutions
+    authors:
+      - "A. J. Scott"
+    id: "https://doi.org/10.1103/PhysRevA.69.052330"
+    type: "article"
+    location: "AME(5,2) existence, as cited by Formal Conjectures"
+    relationship: "formalizes"
+    author_endorsement: "not-contacted"
+  - title: "Absolutely Maximally Entangled Qudit Graph States"
+    authors:
+      - "Wolfram Helwig"
+    id: "arXiv:1306.2879"
+    type: "article"
+    location: "AME states as graph states; the ring state here is one"
+    relationship: "background"
+    author_endorsement: "not-contacted"
+
+related_formalizations:
+  - id: "https://github.com/google-deepmind/formal-conjectures/blob/40a8592cb6f7e96cb9a8275d96bb3e013feeb1dc/FormalConjectures/OpenQuantumProblems/35.lean"
+    relationship: "builds-on"
+    note: >-
+      Supplies the statement `OpenQuantumProblem35.ame_5_2_exists` and every definition
+      it uses. This repository depends on Formal Conjectures at that commit and proves
+      the same proposition without using the declaration left as `sorry` there.
+
+classification:
+  arxiv:
+    - "quant-ph"
+  msc2020:
+    - "81P40"
+    - "81P70"
+
+automation:
+  methods:
+    - method: "agent"
+      models:
+        - "Claude"
+      framework: "Claude Code"
+  notes: "I drafted the Lean with Claude Code and checked the witness numerically first."
+
+review:
+  status: "author-verified"
+  reviewers:
+    - "Zayn Blore"
+    - "Claude Fable 5.1 (independent agent review, 2026-09-24)"
+  notes: >-
+    Checks run: statement term-identical to Formal Conjectures' `ame_5_2_exists`; axioms limited to propext, Classical.choice and
+    Quot.sound; a control state (the five-qubit path) is rejected by the same kernel check;
+    Mathlib's standard linter set, text linters and Batteries runLinter pass.
+
+status:
+  scope: "Full proof of the single Formal Conjectures statement `ame_5_2_exists`."
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms:
+    - "propext"
+    - "Classical.choice"
+    - "Quot.sound"
+  main_results:
+    - description: "An AME(5,2) state exists."
+      declaration: "AME52.ame_5_2_exists"
+      file: "AME52/FormalTarget.lean"
+      sorry_count: 0
+      axioms:
+        - "propext"
+        - "Classical.choice"
+        - "Quot.sound"
+
+fidelity:
+  divergences: >-
+    None in the statement, which is Formal Conjectures' own. The finite core
+    `AME52.ringSign_trace` is checked by `decide +kernel` over all 120 permutations
+    (no `native_decide`).
+
+alignment:
+  namespaces:
+    - "AME52"
+  statements:
+    - source: "Formal Conjectures, OpenQuantumProblem35.ame_5_2_exists"
+      lean: "AME52.ame_5_2_exists"
+      module: "AME52.FormalTarget"
+      status: "proved"
+
+acknowledgements: >-
+  Thanks to the authors of Lean 4, Mathlib and Formal Conjectures.
